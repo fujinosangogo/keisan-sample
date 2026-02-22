@@ -21,12 +21,15 @@ h1 {
 }
 
 #problems {
-  font-size: 40px;
-  line-height: 2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* ← 2列 */
+  gap: 20px;
+  font-size: 36px;
+  margin-top: 20px;
 }
 
 .problem {
-  margin: 15px 0;
+  padding: 10px 0;
 }
 
 button {
@@ -60,9 +63,9 @@ function generate() {
   const container = document.getElementById("problems");
   container.innerHTML = "";
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 30; i++) {  // ← 30問
 
-    // 繰り上がりなし（合計が9以下）
+    // 繰り上がりなし（合計9以下）
     let a = Math.floor(Math.random() * 9);
     let b = Math.floor(Math.random() * (10 - a));
 
