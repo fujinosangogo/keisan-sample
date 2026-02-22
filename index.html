@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>たしざんプリント</title>
+
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+#name {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+#problems {
+  font-size: 40px;
+  line-height: 2;
+}
+
+.problem {
+  margin: 15px 0;
+}
+
+button {
+  margin: 15px;
+  font-size: 18px;
+  padding: 10px 20px;
+}
+
+@media print {
+  button {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>たしざん</h1>
+
+<div id="name">
+  なまえ：____________________
+</div>
+
+<div id="problems"></div>
+
+<button onclick="generate()">あたらしくする</button>
+<button onclick="window.print()">いんさつ</button>
+
+<script>
+function generate() {
+  const container = document.getElementById("problems");
+  container.innerHTML = "";
+
+  for (let i = 0; i < 10; i++) {
+
+    // 繰り上がりなし（合計が9以下）
+    let a = Math.floor(Math.random() * 9);
+    let b = Math.floor(Math.random() * (10 - a));
+
+    const div = document.createElement("div");
+    div.className = "problem";
+    div.textContent = `${a} ＋ ${b} ＝ ＿＿`;
+    container.appendChild(div);
+  }
+}
+
+generate();
+</script>
+
+</body>
+</html>
