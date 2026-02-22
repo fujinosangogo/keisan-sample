@@ -16,15 +16,11 @@ body {
   text-align: center;
 }
 
-h1 {
-  margin-bottom: 10px;
-}
-
 .controls {
   margin-bottom: 15px;
 }
 
-select, input, button {
+input, select, button {
   font-size: 16px;
   padding: 5px;
   margin: 5px;
@@ -39,7 +35,7 @@ select, input, button {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 15px 40px;
-  font-size: 28px;
+  font-size: 26px;
   margin-top: 10px;
 }
 
@@ -48,7 +44,7 @@ select, input, button {
 }
 
 @media print {
-  .controls, button {
+  .controls {
     display: none;
   }
 }
@@ -60,10 +56,8 @@ select, input, button {
 
 <div class="controls">
   桁数：
-  <select id="digits">
-    <option value="1">1桁</option>
-    <option value="2">2桁</option>
-  </select>
+  <input type="number" id="minDigits" value="1" min="1" max="6"> 〜
+  <input type="number" id="maxDigits" value="1" min="1" max="6"> 桁
 
   繰り上がり：
   <select id="carry">
@@ -72,7 +66,7 @@ select, input, button {
   </select>
 
   問題数：
-  <input type="number" id="count" value="30" min="1" max="100">
+  <input type="number" id="count" value="30" min="1" max="200">
 
   <button onclick="generate()">生成</button>
   <button onclick="window.print()">印刷</button>
@@ -85,6 +79,10 @@ select, input, button {
 <div id="problems"></div>
 
 <script>
+function randomDigits(minD, maxD) {
+  return Math.floor(Math.random() * (maxD - minD + 1)) + minD;
+}
+
 function randomNumber(digits) {
   let min = Math.pow(10, digits - 1);
   let max = Math.pow(10, digits) - 1;
@@ -92,19 +90,26 @@ function randomNumber(digits) {
 }
 
 function generate() {
-  const digits = parseInt(document.getElementById("digits").value);
+  const minDigits = parseInt(document.getElementById("minDigits").value);
+  const maxDigits = parseInt(document.getElementById("maxDigits").value);
   const carry = document.getElementById("carry").value;
   const count = parseInt(document.getElementById("count").value);
   const container = document.getElementById("problems");
+
+  if (minDigits > maxDigits) {
+    alert("最小桁数は最大桁数以下にしてください");
+    return;
+  }
 
   container.innerHTML = "";
 
   for (let i = 0; i < count; i++) {
 
+    let digits = randomDigits(minDigits, maxDigits);
     let a, b;
 
     if (carry === "no") {
-      // 繰り上がりなしロジック
+
       while (true) {
         a = randomNumber(digits);
         b = randomNumber(digits);
