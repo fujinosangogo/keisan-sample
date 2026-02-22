@@ -6,13 +6,19 @@
 <title>たしざんプリント</title>
 
 <style>
+@page {
+  size: A4;
+  margin: 15mm;
+}
+
 body {
   font-family: sans-serif;
   text-align: center;
 }
 
 h1 {
-  font-size: 28px;
+  font-size: 26px;
+  margin-bottom: 10px;
 }
 
 #name {
@@ -22,20 +28,20 @@ h1 {
 
 #problems {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* ← 2列 */
-  gap: 20px;
-  font-size: 36px;
-  margin-top: 20px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px 40px;
+  font-size: 34px;
+  margin-top: 10px;
 }
 
 .problem {
-  padding: 10px 0;
+  padding: 6px 0;
 }
 
 button {
   margin: 15px;
-  font-size: 18px;
-  padding: 10px 20px;
+  font-size: 16px;
+  padding: 8px 18px;
 }
 
 @media print {
@@ -63,11 +69,11 @@ function generate() {
   const container = document.getElementById("problems");
   container.innerHTML = "";
 
-  for (let i = 0; i < 30; i++) {  // ← 30問
+  for (let i = 0; i < 30; i++) {
 
-    // 繰り上がりなし（合計9以下）
-    let a = Math.floor(Math.random() * 9);
-    let b = Math.floor(Math.random() * (10 - a));
+    // 1〜9のみ、繰り上がりなし
+    let a = Math.floor(Math.random() * 9) + 1;
+    let b = Math.floor(Math.random() * (9 - a)) + 1;
 
     const div = document.createElement("div");
     div.className = "problem";
