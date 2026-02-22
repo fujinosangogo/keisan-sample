@@ -17,35 +17,38 @@ body {
 }
 
 h1 {
-  font-size: 26px;
   margin-bottom: 10px;
 }
 
+.controls {
+  margin-bottom: 15px;
+}
+
+select, input, button {
+  font-size: 16px;
+  padding: 5px;
+  margin: 5px;
+}
+
 #name {
-  margin-bottom: 20px;
+  margin: 15px 0;
   font-size: 18px;
 }
 
 #problems {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 18px 40px;
-  font-size: 34px;
+  gap: 15px 40px;
+  font-size: 28px;
   margin-top: 10px;
 }
 
 .problem {
-  padding: 6px 0;
-}
-
-button {
-  margin: 15px;
-  font-size: 16px;
-  padding: 8px 18px;
+  padding: 4px 0;
 }
 
 @media print {
-  button {
+  .controls, button {
     display: none;
   }
 }
@@ -53,7 +56,27 @@ button {
 </head>
 <body>
 
-<h1>たしざん</h1>
+<h1>たしざんプリント</h1>
+
+<div class="controls">
+  桁数：
+  <select id="digits">
+    <option value="1">1桁</option>
+    <option value="2">2桁</option>
+  </select>
+
+  繰り上がり：
+  <select id="carry">
+    <option value="no">なし</option>
+    <option value="yes">あり</option>
+  </select>
+
+  問題数：
+  <input type="number" id="count" value="30" min="1" max="100">
+
+  <button onclick="generate()">生成</button>
+  <button onclick="window.print()">印刷</button>
+</div>
 
 <div id="name">
   なまえ：____________________
@@ -61,19 +84,49 @@ button {
 
 <div id="problems"></div>
 
-<button onclick="generate()">あたらしくする</button>
-<button onclick="window.print()">いんさつ</button>
-
 <script>
+function randomNumber(digits) {
+  let min = Math.pow(10, digits - 1);
+  let max = Math.pow(10, digits) - 1;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function generate() {
+  const digits = parseInt(document.getElementById("digits").value);
+  const carry = document.getElementById("carry").value;
+  const count = parseInt(document.getElementById("count").value);
   const container = document.getElementById("problems");
+
   container.innerHTML = "";
 
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < count; i++) {
 
-    // 1〜9のみ、繰り上がりなし
-    let a = Math.floor(Math.random() * 9) + 1;
-    let b = Math.floor(Math.random() * (9 - a)) + 1;
+    let a, b;
+
+    if (carry === "no") {
+      // 繰り上がりなしロジック
+      while (true) {
+        a = randomNumber(digits);
+        b = randomNumber(digits);
+
+        let ok = true;
+        let aStr = a.toString().padStart(digits, "0");
+        let bStr = b.toString().padStart(digits, "0");
+
+        for (let j = 0; j < digits; j++) {
+          if (parseInt(aStr[j]) + parseInt(bStr[j]) >= 10) {
+            ok = false;
+            break;
+          }
+        }
+
+        if (ok) break;
+      }
+
+    } else {
+      a = randomNumber(digits);
+      b = randomNumber(digits);
+    }
 
     const div = document.createElement("div");
     div.className = "problem";
